@@ -1,0 +1,196 @@
+        	//DataOutputStream test = new DataOutputStream(p.getOutputStream());
+
+        	/*test.writeBytes("sqlite3 /data/data/com.whatsapp/databases/wa.db\n");
+        	test.writeBytes("SELECT * FROM wa_contacts;\n");
+        	//test.writeBytes("exit\n");
+        	test.writeBytes(".exit\n");*/
+        	
+        	
+        	
+        		public InputStream Execute(String Command)
+	{
+		Process p = null;
+
+		try
+        {
+			p = new ProcessBuilder("/system/bin/su", "-c", Command).start();
+        }
+		catch(IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+    	
+    	try {
+    		p.waitFor();
+    	} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		}
+    	
+    	return p.getInputStream();
+	}
+	
+	
+	
+		/*	
+	public ArrayList<String> getChatList()
+	{
+		String query = "SELECT key_remote_jid FROM chat_list ORDER BY message_table_id DESC";
+		
+		InputStream in = Execute("sqlite3 " + WHATSAPP_DB_PATH + "msgstore.db" + " " + "'"+query+"'");
+		
+		BufferedReader input = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		ArrayList<String> ChatList = new ArrayList<String>();
+		
+		try {
+	        while((line=input.readLine()) != null) {
+	        	ChatList.add(line);
+	        }
+		} catch(IOException e) {}
+
+		
+		return ChatList;
+	}
+	
+	void getChatMessages(String jid)
+	{
+		String query = "SELECT data, status FROM messages WHERE key_remote_jid = " + "'"+jid+"'" + "LIMIT 15";
+	}
+	
+	void SendMessage(String jid, String text)
+	{
+		//key_remote_jid = 5491158740074@s.whatsapp.net
+		//key_from_me = 1
+		//key_id = ?
+		//status = 0
+		//needs_push = 0
+		//data = text
+		//timestamp = 1388969146299
+		//origin = 0
+		//received_timestamp = 1388969146306
+		//send_timestamp = -1
+	}
+}*/
+
+/*public class Whatsapp {
+	private static final String WHATSAPP_PATH = "/data/data/com.whatsapp/databases/";
+	
+	private static SQLiteDatabase db;
+	
+	Whatsapp()
+	{
+		
+	}
+	
+	
+	
+	void Open()
+	{
+		try
+		{
+			//OPEN_READWRITE
+			db = SQLiteDatabase.openDatabase(WHATSAPP_PATH + "wa.db", null, SQLiteDatabase.OPEN_READONLY);
+		} catch(SQLiteException e)
+		{
+			//
+		}
+	}
+	
+	void Close()
+	{
+		if( db != null && db.isOpen() ) {
+			db.close();
+		}
+	}
+}*/
+
+
+
+
+        /*Thread t = new Thread(){
+        	public void run(){
+        		
+        	}
+        };
+        t.start();*/
+        
+        
+        
+        	private static final int SERVER_PORT = 8080;
+	private ServerSocket serverSocket = null;
+	private Socket clientSocket = null;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*private class Server extends Thread {
+		public Server() {
+			try {
+				serverSocket = new ServerSocket(SERVER_PORT);
+			} catch (IOException e) {
+				Log.i("[DEBUG]",
+						"Could not listen on port: "
+								+ Integer.toString(SERVER_PORT) + ".");
+			}
+		}
+
+		public void run() {
+			try {
+				while (true) {
+					clientSocket = serverSocket.accept();
+
+					InputStream input = clientSocket.getInputStream();
+					OutputStream output = clientSocket.getOutputStream();
+
+					JSONObject jsonObj = new JSONObject();
+					JSONArray jsonArr = new JSONArray();
+
+					try {
+						jsonObj.put("name", "Fernando");
+						jsonObj.put("surname", "Velcic");
+					} catch (JSONException e) {
+					}
+
+					output.write(("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: "
+							+ Integer.toString(jsonObj.toString().length())
+							+ "\r\n\r\n" + jsonObj.toString()).getBytes());
+					// output.write(jsonObj.toString().getBytes());
+
+					clientSocket.close();
+
+					// if (Thread.interrupted()) {
+					// serverSocket.close();
+					// return;
+					// }
+				}
+			} catch (IOException e) {
+			}
+		}
+	}*/
+	
+			// serverThread = new Server();
+		// serverThread.start();
+		// new Server().start();
+		
+		
+				try {
+			FileOutputStream output = openFileOutput("sqlite3", Context.MODE_WORLD_WRITEABLE);
+			InputStream input = getAssets().open("sqlite3");
+			
+		    byte[] buffer = new byte[1024]; 
+		    int read;
+		    while((read = input.read(buffer)) != -1){ 
+		    	output.write(buffer, 0, read); 
+		    } 
+		    output.close();
+		    
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		RootToolsE.ChangeMode("sqlite3", 111);

@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/root_status"
+        tools:context=".MainActivity" />
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textView2"
+        android:padding="@dimen/padding_medium"
+        android:text="NO"
+        android:textColor="#FF0000"
+        tools:context=".MainActivity" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView2"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/ip_address"
+        tools:context=".MainActivity" />
+
+    <TextView
+        android:id="@+id/textIpAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView01"
+        android:layout_alignBottom="@+id/TextView01"
+        android:layout_alignLeft="@+id/textStatus"
+        android:padding="@dimen/padding_medium"
+        android:text="NO"
+        android:textColor="#FF0000"
+        tools:context=".MainActivity" />
+
+    <Button
+        android:id="@+id/buttonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView01"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="32dp"
+        android:onClick="startClicked"
+        android:text="@string/start" />
+
+    <Button
+        android:id="@+id/buttonStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonStart"
+        android:layout_alignBottom="@+id/buttonStart"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:onClick="stopClicked"
+        android:text="@string/stop" />
+
+</RelativeLayout>

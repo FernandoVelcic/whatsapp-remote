@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<title>Chat - Customer Module</title>  
+<link type="text/css" rel="stylesheet" href="css/style.css" />  
+</head>  
+
+<div id="wrapper">  
+    <div id="menu">  
+        <p class="welcome">Chat list: <b></b></p>  
+        <select id="contacts">
+		</select>
+        <div style="clear:both"></div>
+		
+    </div>  
+      
+    <div id="chatbox"></div>  
+      
+    <form name="message" action="">  
+        <input name="usermsg" type="text" id="usermsg" size="63" />  
+        <input name="submitmsg" type="submit" id="submitmsg" value="Send" />  
+    </form>  
+</div>  
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>  
+<script type="text/javascript">  
+// jQuery Document  
+$(document).ready(function(){
+	if (!window.WebSocket){
+		alert("ERROR: WebSocket not natively supported.");
+	}
+	var ws = new WebSocket("ws://192.168.1.104:8081");
+	var contactsList;
+	
+	ws.onopen = function(){
+		ws.send('{"action":"requestContacts"}');
+		ws.send('{"action":"requestChats"}');
+    }
+	ws.onclose = function(){
+		ws = null;
+		alert("Disconnected.");
+    }
+	ws.onmessage = function(e){
+		var response = $.parseJSON(e.data);
+		
+		if(response.action == "respondContacts"){
+			contactsList = response.contacts;
+		}
+		if(response.action == "respondChats"){
+			$("#contacts").empty();
+			
+			$.each(response.chats, function(key, obj) {
+				$("#contacts").append("<option value='" + obj.phone + "'>" + getName(obj.phone) + "</option>");
+			});
+			
+			getMessages();
+		}
+		if(response.action == "respondMessages"){
+			$("#chatbox").html("<div class='msgln'>");
+			
+			$.each(response.messages, function(key, obj) {
+				if(obj.origin == 0) //me
+					$("#chatbox").append("<b>Me:</b><br />");
+				else
+				{
+					if(obj.phone == "") //grupal
+						$("#chatbox").append("<b>" + $("#contacts option:selected").text() + ":</b><br />");
+					else //from
+						$("#chatbox").append("<b>" + getName(obj.phone) + ":</b><br />");
+				}
+					
+				var date = new Date(obj.received_timestamp*1);
+					
+				$("#chatbox").append("[" + date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + obj.message + "<br />");
+			});
+			
+			$("#chatbox").append("</div>");
+			//$("#chatbox").scrollTop($("#chatbox").height()+70);
+		}
+	}
+	
+	function getMessages(){
+		ws.send('{"action":"requestMessages","phone":"' + $("#contacts").val() + '","count":"20"}');
+	}
+	
+	function updateMessages(){
+		ws.send('{"action":"requestMessagesUpdate","phone":"' + $("#contacts").val() + '","count":"20"}');
+	}
+	
+	function getName(phone){
+		for(var i = 0; i < contactsList.length; i++)
+		{
+			if(contactsList[i].phone == phone)
+			{
+				return contactsList[i].name;
+			}
+		}
+		
+		return "unknown";
+	}
+
+	$("#submitmsg").click(function(){
+		var clientmsg = $("#usermsg").val();  
+		ws.send('{"action":"sendMessage","phone":"' + $("#contacts").val() + '","message":"' + clientmsg + '"}');
+		$("#usermsg").val("");  
+		return false;  
+	});
+	
+	$("#contacts").change(function() {
+		getMessages();
+		//alert( "Handler for .change() called." );
+	});
+	
+	setInterval(updateMessages, 1000);
+});  
+</script>  
+</body>  
+</html>  
